@@ -1,35 +1,42 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
-metadata: 
+metadata:
   name: appset-webcolor-multicluster
-spec: 
-  generators: 
-    - list:
-      elements: 
-        - cluster: cluster-dev
-          url: https://4e322970-8738-42fd-b1b7-2b67dacf252f.k8s.ondigitalocean.com
-          environment: dev
-          namespace: webcolor-dev
-        - cluster: cluster-hmg
-          url: https://0599bcf1-45d0-42d1-90dc-c5445bed01f3.k8s.ondigitalocean.com
-          environment: hmg
-          namespace: webcolor-hmg
-  template: 
-    metadata: 
-      name: 'web-color-environment-{{environment}}'
-    source:
-      repoURL: https://github.com/viniciusMenezess/web-page-deploy
-      path: k8s
-      targetRevision: HEAD
-    destination:
-      namespace: '{{namespace}}'
-      server: '{{url}}'
-    project: default
-    syncPolicy:
-      automated: 
-        prune: true 
-        selfHeal: true 
-      syncOptions:    
-      - CreateNamespace=true
 
-        
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: cluster-dev
+            url: https://4e322970-8738-42fd-b1b7-2b67dacf252f.k8s.ondigitalocean.com
+            environment: dev
+            namespace: webcolor-dev
+
+          - cluster: cluster-hmg
+            url: https://0599bcf1-45d0-42d1-90dc-c5445bed01f3.k8s.ondigitalocean.com
+            environment: hmg
+            namespace: webcolor-hmg
+
+  template:
+    metadata:
+      name: 'web-color-environment-{{environment}}'
+
+    spec:
+      project: default
+
+      source:
+        repoURL: https://github.com/viniciusMenezess/web-page-deploy
+        path: k8s
+        targetRevision: HEAD
+
+      destination:
+        namespace: '{{namespace}}'
+        server: '{{url}}'
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+
+        syncOptions:
+          - CreateNamespace=true
