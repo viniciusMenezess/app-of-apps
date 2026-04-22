@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: appset-webcolor-multicluster
+  namespace: argocd
+spec:
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: 'web-color-environment-{{name}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/viniciusMenezess/web-page-deploy
+        path: k8s
+        targetRevision: HEAD
+      destination:
+        namespace: 'webcolor'
+        server: '{{server}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
