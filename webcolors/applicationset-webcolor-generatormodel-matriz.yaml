@@ -5,21 +5,27 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - clusters: 
-        selector: 
-          matchLabels: 
-            deploy: "true"
+  - matrix:
+    generators:
+      - list:
+          elements: 
+            - environment: "dev" 
+            - environment: "hmg"
+      - clusters: 
+          selector: 
+            matchLabels: 
+              deploy: "true"
   template:
     metadata:
-      name: 'web-color-environment-{{name}}'
+      name: 'web-color-environment-{{name}}-{{environment}}'
     spec:
       project: default
       source:
         repoURL: https://github.com/viniciusMenezess/web-page-deploy
-        path: k8s
+        path: 'k8s-{{environment}}'
         targetRevision: HEAD
       destination:
-        namespace: 'webcolor'
+        namespace: 'webcolor-{{environment}}'
         server: '{{server}}'
       syncPolicy:
         automated:
