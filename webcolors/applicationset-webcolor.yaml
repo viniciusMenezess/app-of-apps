@@ -15,6 +15,10 @@ spec:
             url: https://0599bcf1-45d0-42d1-90dc-c5445bed01f3.k8s.ondigitalocean.com
             environment: hmg
             namespace: webcolor-hmg
+          - cluster: cluster-prd
+            url: https://0599bcf1-45d0-42d1-90dc-c5445bed01f3.k8s.ondigitalocean.com
+            environment: prd
+            namespace: webcolor-prd
   template:
     metadata:
       name: 'web-color-environment-{{environment}}'
